@@ -1,0 +1,25 @@
+version: "1"
+services:
+  selenium-hub:
+    image: seleniarm/hub
+    ports:
+      - "4444:4444"
+
+  selenium-node-chrome:
+    image: seleniarm/node-chromium
+    scale: 3
+    environment:
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_NODE_SESSION_TIMEOUT=60000
+      - SE_NODE_MAX_SESSIONS=10
+
+  selenium-node-firefox:
+    image: seleniarm/node-firefox
+    scale: 1
+    environment:
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_NODE_SESSION_TIMEOUT=60000
